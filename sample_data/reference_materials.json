@@ -1,0 +1,88 @@
+{
+  "description": "Reference material catalog used by the deterministic validation layer. In production this would be a managed table (Postgres / ERP export / client master list). The pipeline checks every extracted material code, unit, and quantity against these records.",
+  "version": "1.0.0",
+  "materials": [
+    {
+      "code": "CMU-8",
+      "canonical_name": "Concrete Masonry Unit, 8\" standard",
+      "category": "masonry",
+      "default_unit": "EA",
+      "allowed_units": ["EA", "PCS"],
+      "spec_standard": "ASTM C90",
+      "min_quantity": 0.0,
+      "max_quantity": 200000
+    },
+    {
+      "code": "CONC-4000",
+      "canonical_name": "Ready-Mix Concrete, 4000 psi",
+      "category": "concrete",
+      "default_unit": "CY",
+      "allowed_units": ["CY", "CUYD"],
+      "spec_standard": "ASTM C94",
+      "min_quantity": 0.0,
+      "max_quantity": 50000
+    },
+    {
+      "code": "RB-#5",
+      "canonical_name": "Reinforcing Bar #5 (16 mm)",
+      "category": "reinforcement",
+      "default_unit": "LF",
+      "allowed_units": ["LF", "FT", "TON"],
+      "spec_standard": "ASTM A615",
+      "min_quantity": 0.0,
+      "max_quantity": 500000,
+      "aliases": ["RB#5", "REBAR#5", "#5 REBAR"]
+    },
+    {
+      "code": "STL-W12X26",
+      "canonical_name": "Structural Steel Wide-Flange W12x26",
+      "category": "structural_steel",
+      "default_unit": "LF",
+      "allowed_units": ["LF", "FT"],
+      "spec_standard": "ASTM A992",
+      "min_quantity": 0.0,
+      "max_quantity": 100000,
+      "aliases": ["W12X26", "W12-26"]
+    },
+    {
+      "code": "GYP-58",
+      "canonical_name": "Gypsum Board 5/8\" Type X",
+      "category": "finishes",
+      "default_unit": "SF",
+      "allowed_units": ["SF", "SHT"],
+      "spec_standard": "ASTM C1396",
+      "min_quantity": 0.0,
+      "max_quantity": 500000
+    },
+    {
+      "code": "INS-R19",
+      "canonical_name": "Batt Insulation R-19",
+      "category": "thermal",
+      "default_unit": "SF",
+      "allowed_units": ["SF"],
+      "spec_standard": "ASTM C665",
+      "min_quantity": 0.0,
+      "max_quantity": 500000
+    },
+    {
+      "code": "PVC-4",
+      "canonical_name": "PVC Pipe 4\" Schedule 40",
+      "category": "plumbing",
+      "default_unit": "LF",
+      "allowed_units": ["LF", "FT"],
+      "spec_standard": "ASTM D1785",
+      "min_quantity": 0.0,
+      "max_quantity": 100000
+    },
+    {
+      "code": "EMT-34",
+      "canonical_name": "Electrical Metallic Tubing 3/4\"",
+      "category": "electrical",
+      "default_unit": "LF",
+      "allowed_units": ["LF", "FT"],
+      "spec_standard": "UL 797",
+      "min_quantity": 0.0,
+      "max_quantity": 100000
+    }
+  ]
+}

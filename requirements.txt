@@ -1,0 +1,11 @@
+# Core API
+fastapi>=0.110,<1.0
+uvicorn[standard]>=0.29
+pydantic>=2.6,<3.0
+
+# File upload support (multipart/form-data)
+python-multipart>=0.0.9
+
+# Test + local API client (Starlette TestClient depends on httpx)
+httpx>=0.27
+pytest>=8.0
