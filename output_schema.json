@@ -1,0 +1,603 @@
+{
+  "$defs": {
+    "ComplianceNote": {
+      "additionalProperties": false,
+      "properties": {
+        "reference": {
+          "description": "Code/standard reference, e.g. 'IBC 2021 \u00a71705'.",
+          "title": "Reference",
+          "type": "string"
+        },
+        "requirement": {
+          "description": "Plain-language requirement.",
+          "title": "Requirement",
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/ComplianceStatus",
+          "default": "unknown"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "reference",
+        "requirement",
+        "confidence"
+      ],
+      "title": "ComplianceNote",
+      "type": "object"
+    },
+    "ComplianceStatus": {
+      "enum": [
+        "satisfied",
+        "pending",
+        "not_addressed",
+        "unknown"
+      ],
+      "title": "ComplianceStatus",
+      "type": "string"
+    },
+    "Deadline": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "description": "What the deadline refers to.",
+          "title": "Label",
+          "type": "string"
+        },
+        "due_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Parsed ISO date, if recognized.",
+          "title": "Due Date"
+        },
+        "raw_text": {
+          "description": "Original source phrase.",
+          "title": "Raw Text",
+          "type": "string"
+        },
+        "confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "label",
+        "raw_text",
+        "confidence"
+      ],
+      "title": "Deadline",
+      "type": "object"
+    },
+    "ExtractedDocument": {
+      "additionalProperties": false,
+      "description": "Structured representation of a single technical/project document.",
+      "properties": {
+        "project_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Project / job number.",
+          "title": "Project Id"
+        },
+        "project_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Project Name"
+        },
+        "client_reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Client PO / contract ref.",
+          "title": "Client Reference"
+        },
+        "document_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "e.g. 'Material Schedule', 'Scope of Work'.",
+          "title": "Document Type"
+        },
+        "revision": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Document revision, e.g. 'Rev C'.",
+          "title": "Revision"
+        },
+        "issue_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Issue Date"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Project location, if stated.",
+          "title": "Location"
+        },
+        "materials": {
+          "items": {
+            "$ref": "#/$defs/ExtractedMaterial"
+          },
+          "title": "Materials",
+          "type": "array"
+        },
+        "deadlines": {
+          "items": {
+            "$ref": "#/$defs/Deadline"
+          },
+          "title": "Deadlines",
+          "type": "array"
+        },
+        "compliance_notes": {
+          "items": {
+            "$ref": "#/$defs/ComplianceNote"
+          },
+          "title": "Compliance Notes",
+          "type": "array"
+        },
+        "risk_flags": {
+          "items": {
+            "$ref": "#/$defs/RiskFlag"
+          },
+          "title": "Risk Flags",
+          "type": "array"
+        }
+      },
+      "title": "ExtractedDocument",
+      "type": "object"
+    },
+    "ExtractedMaterial": {
+      "additionalProperties": false,
+      "description": "A single line item lifted from a material schedule / takeoff table.",
+      "properties": {
+        "line_item": {
+          "description": "1-based row index within the schedule.",
+          "minimum": 1,
+          "title": "Line Item",
+          "type": "integer"
+        },
+        "raw_text": {
+          "description": "Original (messy) source line for traceability.",
+          "title": "Raw Text",
+          "type": "string"
+        },
+        "material_code": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Normalized catalog code, if one was recognized.",
+          "title": "Material Code"
+        },
+        "description": {
+          "description": "Human-readable material description.",
+          "title": "Description",
+          "type": "string"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Parsed quantity.",
+          "title": "Quantity"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unit of measure, e.g. EA, LF, CY, SF.",
+          "title": "Unit"
+        },
+        "dimensions": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Raw dimension string, e.g. '8 in x 8 in x 16 in'.",
+          "title": "Dimensions"
+        },
+        "spec_reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Referenced spec/standard, e.g. 'ASTM C90'.",
+          "title": "Spec Reference"
+        },
+        "confidence": {
+          "description": "Extractor confidence [0,1].",
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "line_item",
+        "raw_text",
+        "description",
+        "confidence"
+      ],
+      "title": "ExtractedMaterial",
+      "type": "object"
+    },
+    "ExtractionMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "extractor": {
+          "description": "Identifier of the extraction component.",
+          "title": "Extractor",
+          "type": "string"
+        },
+        "mode": {
+          "default": "simulated",
+          "description": "'simulated' for the demo; 'llm' when wired to a real provider.",
+          "title": "Mode",
+          "type": "string"
+        },
+        "document_char_count": {
+          "minimum": 0,
+          "title": "Document Char Count",
+          "type": "integer"
+        },
+        "materials_found": {
+          "minimum": 0,
+          "title": "Materials Found",
+          "type": "integer"
+        },
+        "overall_confidence": {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "title": "Overall Confidence",
+          "type": "number"
+        },
+        "duration_ms": {
+          "minimum": 0,
+          "title": "Duration Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "extractor",
+        "document_char_count",
+        "materials_found",
+        "overall_confidence",
+        "duration_ms"
+      ],
+      "title": "ExtractionMetadata",
+      "type": "object"
+    },
+    "IssueSeverity": {
+      "description": "Severity for validation issues and risk flags.",
+      "enum": [
+        "error",
+        "warning",
+        "info"
+      ],
+      "title": "IssueSeverity",
+      "type": "string"
+    },
+    "IssueType": {
+      "description": "Stable codes for deterministic validation findings.",
+      "enum": [
+        "unknown_material_code",
+        "unit_mismatch",
+        "missing_required_field",
+        "non_positive_quantity",
+        "quantity_out_of_range",
+        "unparseable_dimension",
+        "low_confidence",
+        "deadline_in_past",
+        "deadline_before_issue_date",
+        "duplicate_line_item",
+        "compliance_not_addressed"
+      ],
+      "title": "IssueType",
+      "type": "string"
+    },
+    "JobStatus": {
+      "description": "Lifecycle of a single document-processing job.",
+      "enum": [
+        "queued",
+        "extracting",
+        "validating",
+        "completed",
+        "needs_review",
+        "failed"
+      ],
+      "title": "JobStatus",
+      "type": "string"
+    },
+    "RiskFlag": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "description": "Risk category, e.g. 'schedule', 'data_quality'.",
+          "title": "Category",
+          "type": "string"
+        },
+        "description": {
+          "description": "What the risk is.",
+          "title": "Description",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/IssueSeverity",
+          "default": "warning"
+        },
+        "source": {
+          "default": "extraction",
+          "description": "'extraction' or 'validation'.",
+          "title": "Source",
+          "type": "string"
+        }
+      },
+      "required": [
+        "category",
+        "description"
+      ],
+      "title": "RiskFlag",
+      "type": "object"
+    },
+    "ValidationIssue": {
+      "additionalProperties": false,
+      "description": "A single deterministic finding produced by the validation layer.",
+      "properties": {
+        "field_path": {
+          "description": "Dotted path to the offending value.",
+          "title": "Field Path",
+          "type": "string"
+        },
+        "issue_type": {
+          "$ref": "#/$defs/IssueType"
+        },
+        "severity": {
+          "$ref": "#/$defs/IssueSeverity"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "observed": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The value as extracted.",
+          "title": "Observed"
+        },
+        "expected": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "What a valid value looks like.",
+          "title": "Expected"
+        },
+        "suggested_action": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Suggested Action"
+        }
+      },
+      "required": [
+        "field_path",
+        "issue_type",
+        "severity",
+        "message"
+      ],
+      "title": "ValidationIssue",
+      "type": "object"
+    },
+    "ValidationSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "total_issues": {
+          "minimum": 0,
+          "title": "Total Issues",
+          "type": "integer"
+        },
+        "errors": {
+          "minimum": 0,
+          "title": "Errors",
+          "type": "integer"
+        },
+        "warnings": {
+          "minimum": 0,
+          "title": "Warnings",
+          "type": "integer"
+        },
+        "infos": {
+          "minimum": 0,
+          "title": "Infos",
+          "type": "integer"
+        },
+        "passed": {
+          "description": "True when there are no ERROR-severity issues.",
+          "title": "Passed",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "total_issues",
+        "errors",
+        "warnings",
+        "infos",
+        "passed"
+      ],
+      "title": "ValidationSummary",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "Final structured output for one ingested document. Safe to sync to a dashboard, flatten to CSV, or push into a CRM.",
+  "properties": {
+    "schema_version": {
+      "default": "1.0.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "job_id": {
+      "title": "Job Id",
+      "type": "string"
+    },
+    "source_filename": {
+      "title": "Source Filename",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/JobStatus"
+    },
+    "document": {
+      "$ref": "#/$defs/ExtractedDocument"
+    },
+    "extraction_metadata": {
+      "$ref": "#/$defs/ExtractionMetadata"
+    },
+    "validation_issues": {
+      "items": {
+        "$ref": "#/$defs/ValidationIssue"
+      },
+      "title": "Validation Issues",
+      "type": "array"
+    },
+    "validation_summary": {
+      "$ref": "#/$defs/ValidationSummary"
+    },
+    "requires_human_review": {
+      "title": "Requires Human Review",
+      "type": "boolean"
+    },
+    "review_reasons": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Review Reasons",
+      "type": "array"
+    },
+    "generated_at": {
+      "format": "date-time",
+      "title": "Generated At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "job_id",
+    "source_filename",
+    "status",
+    "document",
+    "extraction_metadata",
+    "validation_summary",
+    "requires_human_review"
+  ],
+  "title": "ProcessingResult",
+  "type": "object"
+}
